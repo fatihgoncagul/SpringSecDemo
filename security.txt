@@ -1,0 +1,38 @@
+SPRING SECURITY
+
+Authentication
+Authorization
+
+
+Spring Security take cares of most of the attacks.
+
+---top 10 security risks OWASP (open web application security project)---
+
+-acces control
+
+-cryptographic failures (encryption of transferred data)
+
+-Injection: sql injection attacker writes something to trigger the query and get information: which is prevented via prepared statement which needs type when taking input for the query
+different types of injection exist
+
+-insecure design
+
+-security misconfiguration: using default configurations
+
+-vulnerable and outdated components
+
+-identification and authentication failures; storing password in database is not a good idea; u can encrypt if you want to store
+
+-missing multi-factor authentication
+
+-software and data integrity
+
+-logging and monitoring failures; put logs in a good manner not too much not less, enough to keep track of security attacks and enough to not to slow down the app
+
+-server side request forgery: transferred data (server to client)is malicious !!
+
+
+
+
+
+
