@@ -31,6 +31,87 @@ different types of injection exist
 
 -server side request forgery: transferred data (server to client)is malicious !!
 
+---------
+added security config file: made special authprovider and filterchain(all requests go to page is authenticated; stateless)
+this sec config has UserDetailsService object which is connected with daoauthprovider to get hold on database
+then created myuserdetail service implements userdetailsservice
+then added userrepository to myuserdetailservice
+then implementing userdetailsservice interface led to overriding loaduserbyusername method
+and with that method we return UserPrincipal(user)
+in the UserPrincipal we have User object which we have created in model package as @Data @Entity @Table("users")
+user principal takes user with its constructor
+UserPrincipal implements UserDetails which is special interface from spring security
+also in userprincipal we assign role with overrided method
+Another thing to mention is user repo is extending jpa<User,Integer> which is representing users table
+
+----------
+cryptography
+
+a sends message to c but b which is hacker can see it!!
+one solution is using symmetric keys, means using same key for message encryption and decryption
+another one is asymmetric keys, means using public and private keys
+: a sends data to c by using c's public key and only c can decrypt it with his own private key.
+but! when a sends data to c, b (hacker) cannot see it but it can hack that message and send another message to c by using c's public key
+so this can be solved by using digital signature
+
+we need double encryiption decryption
+
+a sends message to c
+a will encrypt it with his private key and c's public key
+now b (hacker) cannot acces or manipulate that message cause she needs to use a's public key and c's private key; she can use b's public key but not c's private key
+after c gets the message he says okay i will decrypt it with a's public key and my own private key
+and this way c knows its coming from a and only himself can decrypt it
+---------
+JWT (JSON WEB TOKEN)
+"""""this part is done on procject called SpringSecDemo"""""
+it is a way to transfer data between two different parties and that to securely.
+each token has three sections
+1. header: algorithm and token type
+2. payload: data
+3. verify signature: when we are using HS256 there will be one secret key that will be shared with client and server
+
+How can this token can be implemented?
+lets say client wants to send message to the server
+client logs in, server needs to create a token and send that token back to the client
+after that, client sends message to the server with that token, server needs to verify that token and then take that message
+so it is our job to create the token and give it to the client and verify the token when client sends message!
+
+
+we have done the genereating token part and send it to server from client
+to verify it, we are going to use a filter(which spring has built in filter called usernamepassowrd filter) between servlet container - servlet
+check the img.png
+we will add JWT FİLTER
+
+since spring works with UsernamePasswordAuthenticationToken we needed to
+ create that since we are adding filtter to verify after that we will
+ pass it to the UsernamePasswordAuthentaitonToken
+
+verifying part is done in jwtservice and those methods are beinng used in jwtfilter
+--------------------------------------------------
+SUMMARY OF JWT
+1. Objective: Obtain access to a protected resource by sending a "hello" request from the client to the server, which responds with "Hello World".
+2. Authentication Mechanism: Instead of using session-based authentication, employ JSON Web Tokens (JWT). This involves sending a token with each request for the server to validate.
+3. Server Configuration:
+Update the SecurityConfig to handle JWT authentication.
+When a user logs in, generate a JWT token.
+4. JWT Token Generation:
+Create a token with user claims (e.g., subject, issue date, expiration).
+Sign the token with HMAC SHA-256 algorithm.
+Set an expiration time (e.g., three minutes).
+5. Token Secret Key: Use a secret key to generate and validate JWT tokens.
+6. Token Response: Send the generated token back to the client as a string response.
+7. Token Usage: Include the JWT token in subsequent requests to access protected resources.
+8. Server-side Filtering:
+Implement a filter (jwtFilter) before the UsernamePasswordAuthenticationFilter in Spring Security.
+Extract the JWT token from the request header.
+Validate the token, ensuring it's not expired and matches the user in the database.
+Update the security context with the validated token.
+9. Token Validation:
+Check if the token contains the correct username and is not expired.
+Retrieve additional claims if necessary.
+--------------------------------------------------
+
+
 
 
 
